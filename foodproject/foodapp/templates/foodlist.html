@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination" style="background-color:rgb(167, 151, 238);">
+    &nbsp;
+      {% if posts.has_previous %}
+      <li class="page-item" style="font-family:cursive;"><a class="page-link" href="?page=1">First</a></li>
+      <li class="page-item" style="font-family:cursive;"><a class="page-link" href="?page={{posts.previous_page_number}}">Previous</a></li>
+      {% endif %}
+      
+      {% for num in posts.paginator.page_range %}
+        {% ifequal num posts.number %}
+        <li class="active" style="font-family:cursive;"><a class="page-link" style="color: gray;" href="?page={{ num }}" disabled>{{ num }}<span class="sr-only">{{num}}</span></a></li>
+        {% else %}
+        <li style="font-family:cursive;"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endifequal %}
+      {% endfor %}
+      {% if posts.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{posts.next_page_number}}">Next</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{posts.paginator.num_pages}}">Last</a></li>
+      {% endif %}
+    </ul>
+</nav>
+
+    {%for blog in posts.object_list %}
+      <div class="col-md-4">
+      <div class="card mb-4 shadow-sm">
+          {% csrf_token %} 
+          <img src="{{blog.image}}" width="100%" height="255"/>
+          <div class="card-body">
+              <h3>{{blog.title}}</h3>    
+              <p class="card-text">
+                  {{blog.description}}
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
+                  <div class="btcn-group">
+                  <a href="{% url 'edit' blog.id %}"><button type="button" class="btn btn-sm btn-outline-secondary active">수정</button></a>
+                  <a href="{% url 'delete' blog.id %}"><button type="button" class="btn btn-sm btn-outline-secondary active">삭제</button></a>
+                  </div>
+                  <small class="text-muted">9 mins</small>
+              </div>
+          </div>
+      </div>
+      </div>
+    {% endfor %}
+ {% endblock %}
+
+ 
